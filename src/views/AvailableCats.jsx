@@ -14,13 +14,15 @@ export default function AvailableCats() {
   const [cats, setCats] = useState([]);
   const [filteredCats, setFilteredCats] = useState([]);
   const [selectedBreed, setSelectedBreed] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // Fetch cat images from an API endpoint and assign it to the featuredCats list
     const fetchCatImages = async () => {
       try {
         const responses = await Promise.all(
-          availableCats.map(() => fetch('https://api.thecatapi.com/v1/images/search').then((res) => res.json()))
+          availableCats.map(() =>
+            fetch('https://api.thecatapi.com/v1/images/search').then((res) => res.json())
+          )
         );
         const catsWithImages = availableCats.map((cat, index) => ({
           ...cat,
@@ -41,11 +43,30 @@ export default function AvailableCats() {
     const selectedBreed = event.target.value;
     setSelectedBreed(selectedBreed);
 
-    if (selectedBreed === 'All') {
-      setFilteredCats(cats);
-    } else {
-      setFilteredCats(cats.filter((cat) => cat.breed === selectedBreed));
+    filterCats(searchQuery, selectedBreed);
+  };
+
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    filterCats(query, selectedBreed);
+  };
+
+  const filterCats = (query, breed) => {
+    let filtered = cats;
+
+    if (breed !== 'All') {
+      filtered = filtered.filter((cat) => cat.breed === breed);
     }
+
+    if (query) {
+      filtered = filtered.filter((cat) =>
+        cat.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    setFilteredCats(filtered);
   };
 
   return (
@@ -54,6 +75,16 @@ export default function AvailableCats() {
       <p>Meet our adorable cats looking for their forever home!</p>
 
       <div className="mb-3">
+        <label htmlFor="cat-search" className="form-label">Search by name:</label>
+        <input
+          id="cat-search"
+          className="form-control mb-3"
+          type="text"
+          placeholder="Enter cat name"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+
         <label htmlFor="cat-filter" className="form-label">Filter by breed:</label>
         <select
           id="cat-filter"
