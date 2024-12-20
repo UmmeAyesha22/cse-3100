@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <>
       <section className="text-center mt-4">
-        <h2>Welcome to Purrfect Adoption</h2>
+        <h1>Welcome to Purrfect Adoption</h1>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas luc Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas luc Lorem
           ipsum dolor sit amet, consectetur adipiscing elit. Maecenas luc
@@ -39,7 +39,7 @@ export default function Home() {
       </section>
 
       <section className="mt-5">
-        <h2>Featured cats</h2>
+        <h1>Featured cats</h1>
         <div className="mt-2 row g-4" id="cats-container"></div>
         <div className="mt-2 row g-4" id="cats-container">
           {cats.map((cat, i) => (
